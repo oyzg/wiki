@@ -1,10 +1,7 @@
 package com.oyzg.wiki.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController//返回字符串
 //@Controller//返回页面
@@ -15,5 +12,10 @@ public class TestController {
     public String hello() {
         return "Hello world!";
     }
+    @PostMapping("/hello/post")
+    public String hello(String name) {
+        return "Hello world!" + name;
+    }
+
 
 }
