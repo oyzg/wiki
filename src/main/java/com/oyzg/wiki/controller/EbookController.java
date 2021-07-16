@@ -1,6 +1,7 @@
 package com.oyzg.wiki.controller;
 
 import com.oyzg.wiki.domain.Ebook;
+import com.oyzg.wiki.resp.CommonResp;
 import com.oyzg.wiki.service.EbookService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +17,11 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/ebook/list")
-    public List<Ebook> list() {
-        return ebookService.list();
+    public CommonResp list() {
+        CommonResp<List<Ebook>> resp = new CommonResp<>();
+        List<Ebook> list = ebookService.list();
+        resp.setContent(list);
+        return resp;
     }
 
 }
