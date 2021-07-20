@@ -101,7 +101,7 @@ export default defineComponent({
         const data = response.data;
         ebooks.value = data.content;
         // ebooks1.books = data.content;
-        console.log(response);
+        // console.log(response);
       });
     });
     const pagination = {
