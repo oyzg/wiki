@@ -7,9 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class EbookReq extends PageReq{
-    private Long id;
+@ToString
+public class PageReq {
+    private int page;
 
-    private String name;
+    private int size;
 
 }
