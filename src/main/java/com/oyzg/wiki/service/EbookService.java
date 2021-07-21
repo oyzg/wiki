@@ -5,8 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.oyzg.wiki.domain.Ebook;
 import com.oyzg.wiki.domain.EbookExample;
 import com.oyzg.wiki.mapper.EbookMapper;
-import com.oyzg.wiki.req.EbookReq;
-import com.oyzg.wiki.resp.EbookResp;
+import com.oyzg.wiki.req.EbookQueryReq;
+import com.oyzg.wiki.req.EbookSaveReq;
+import com.oyzg.wiki.resp.EbookQueryResp;
 import com.oyzg.wiki.resp.PageResp;
 import com.oyzg.wiki.util.CopyUtil;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class EbookService {
     
 
 
-    public PageResp<EbookResp> list(EbookReq req) {
+    public PageResp<EbookQueryResp> list(EbookQueryReq req) {
 
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
@@ -49,11 +50,21 @@ public class EbookService {
 //            EbookResp ebookResp = CopyUtil.copy(ebook, EbookResp.class);
 //            respList.add(ebookResp);
 //        }
-        List<EbookResp> respList = CopyUtil.copyList(ebookList, EbookResp.class);
-        PageResp<EbookResp> pageResp = new PageResp<>();
+        List<EbookQueryResp> respList = CopyUtil.copyList(ebookList, EbookQueryResp.class);
+        PageResp<EbookQueryResp> pageResp = new PageResp<>();
         pageResp.setList(respList);
         pageResp.setTotal(pageInfo.getTotal());
         return pageResp;
     }
 
+
+    public void save(EbookSaveReq req) {
+        Ebook ebook = CopyUtil.copy(req,Ebook.class);
+        if(ObjectUtils.isEmpty(req.getId())) {
+            ebookMapper.insert(ebook);
+        } else {
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
+
+    }
 }

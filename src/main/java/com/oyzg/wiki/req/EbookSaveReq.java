@@ -1,6 +1,6 @@
-package com.oyzg.wiki.resp;
+package com.oyzg.wiki.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;
