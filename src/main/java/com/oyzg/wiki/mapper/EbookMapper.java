@@ -2,8 +2,9 @@ package com.oyzg.wiki.mapper;
 
 import com.oyzg.wiki.domain.Ebook;
 import com.oyzg.wiki.domain.EbookExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface EbookMapper {
     long countByExample(EbookExample example);
