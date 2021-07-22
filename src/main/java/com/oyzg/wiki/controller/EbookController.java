@@ -9,6 +9,7 @@ import com.oyzg.wiki.service.EbookService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 @RestController//返回字符串
 //@Controller//返回页面
@@ -19,7 +20,7 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResp list(EbookQueryReq req) {
+    public CommonResp list(@Valid EbookQueryReq req) {
         CommonResp<PageResp<EbookQueryResp>> resp = new CommonResp<>();
         PageResp<EbookQueryResp> list = ebookService.list(req);
         resp.setContent(list);
