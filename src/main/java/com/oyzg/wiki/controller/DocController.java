@@ -1,15 +1,11 @@
 package com.oyzg.wiki.controller;
 
-import com.oyzg.wiki.domain.Doc;
-import com.oyzg.wiki.mapper.ContentMapper;
 import com.oyzg.wiki.req.DocQueryReq;
 import com.oyzg.wiki.req.DocSaveReq;
 import com.oyzg.wiki.resp.CommonResp;
 import com.oyzg.wiki.resp.DocQueryResp;
 import com.oyzg.wiki.resp.PageResp;
 import com.oyzg.wiki.service.DocService;
-import com.oyzg.wiki.util.CopyUtil;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -55,6 +51,14 @@ public class DocController {
         CommonResp resp = new CommonResp<>();
         List<String> list = Arrays.asList(idsStr.split(","));
         docService.delete(list);
+        return resp;
+    }
+
+    @GetMapping("/find-content/{id}")
+    public CommonResp findContent(@PathVariable Long id) {
+        CommonResp<String> resp = new CommonResp<>();
+        String content = docService.findContent(id);
+        resp.setContent(content);
         return resp;
     }
 
