@@ -62,3 +62,24 @@ INSERT INTO `category` (id, parent, name, sort) VALUES (500, 000, '其它', 500)
 INSERT INTO `category` (id, parent, name, sort) VALUES (501, 500, '服务器', 501);
 INSERT INTO `category` (id, parent, name, sort) VALUES (502, 500, '开发工具', 502);
 INSERT INTO `category` (id, parent, name, sort) VALUES (503, 500, '热门服务端语言', 503);
+
+
+### 文档表
+DROP TABLE IF EXISTS `doc`;
+CREATE TABLE `doc` (
+                       `id` BIGINT NOT NULL COMMENT 'id',
+                       `ebook_id` BIGINT NOT NULL DEFAULT 0 COMMENT '电子书 id',
+                       `parent` BIGINT NOT NULL DEFAULT 0 COMMENT '父 id',
+                       `name` VARCHAR(50) NOT NULL COMMENT '名称',
+                       `sort` INT COMMENT '顺序',
+                       `view_count` INT DEFAULT 0 COMMENT '阅读数',
+                       `vote_count` INT DEFAULT 0 COMMENT '点赞数',
+                       PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=UTF8MB4 COMMENT='文档';
+
+INSERT INTO `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (1, 1, 0, '文档1', 1, 0, 0);
+INSERT INTO `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (2, 1, 1, '文档1.1', 1, 0, 0);
+INSERT INTO `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (3, 1, 0, '文档2', 2, 0, 0);
+INSERT INTO `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (4, 1, 3, '文档2.1', 1, 0, 0);
+INSERT INTO `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (5, 1, 3, '文档2.2', 2, 0, 0);
+INSERT INTO `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) VALUES (6, 1, 5, '文档2.2.1', 1, 0, 0);
