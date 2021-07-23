@@ -69,7 +69,7 @@
           </P>
           <a-form :model="doc" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" layout="vertical">
             <a-form-item>
-              <a-input v-model:value="doc.name" />
+              <a-input v-model:value="doc.name" placeholder="名称" />
             </a-form-item>
             <a-form-item>
               <a-input v-model:value="doc.parent" />
@@ -85,7 +85,13 @@
               </a-tree-select>
             </a-form-item>
             <a-form-item>
-              <a-input v-model:value="doc.sort" />
+              <a-input v-model:value="doc.sort" placeholder="顺序"/>
+            </a-form-item>
+            <a-form-item>
+              <a-button type="primary" @click="handlePreviewContent()">
+                <EyeOutlined/>
+                内容预览
+              </a-button>
             </a-form-item>
             <a-form-item>
               <div id="content">
@@ -94,6 +100,10 @@
           </a-form>
         </a-col>
       </a-row>
+
+      <a-drawer :closable="false" :visible="drawerVisible" placement="right" width="900" @close="onDrawerClose">
+        <div :innerHTML="previewHtml" class="wangeditor"></div>
+      </a-drawer>
 
     </a-layout-content>
   </a-layout>
@@ -186,7 +196,9 @@ export default defineComponent({
     //-----表单----------
     let editor: any;
     const doc = ref();
-    doc.value = {};
+    doc.value = {
+      ebookId: route.query.ebookId
+    };
     const modalVisible = ref(false);
     const modalLoading = ref(false)
     const handleSave = () => {
@@ -301,9 +313,7 @@ export default defineComponent({
     const add = () => {
       editor.txt.html();
       modalVisible.value = true;
-      doc.value = {
-        ebookId: route.query.ebookId
-      };
+
 
       treeSelectData.value = Tool.copy(level1.value);
       // 为选择树添加一个“无”
@@ -325,6 +335,20 @@ export default defineComponent({
       });
     };
 
+    /**
+     * 富文本预览
+     */
+    const drawerVisible = ref(false);
+    const previewHtml = ref();
+    const handlePreviewContent = () => {
+      const html = editor.txt.html();
+      previewHtml.value = html;
+      drawerVisible.value = true;
+    };
+    const onDrawerClose = () => {
+      drawerVisible.value = false;
+    };
+
     const handleConfirm = (id: number) => {
       ids.length = 0;
       names.length = 0;
@@ -336,7 +360,7 @@ export default defineComponent({
           handleDelete(id);
         },
       });
-    }
+    };
 
     onMounted(() => {
       handleQuery();
@@ -359,7 +383,11 @@ export default defineComponent({
       param,
       level1,
       treeSelectData,
-      handleConfirm
+      handleConfirm,
+      drawerVisible,
+      previewHtml,
+      handlePreviewContent,
+      onDrawerClose
     }
   }
 });
