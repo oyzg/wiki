@@ -88,7 +88,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
-import { message } from 'ant-design-vue';
+import { message, Modal } from 'ant-design-vue';
 import {Tool} from "@/util/tool";
 import {useRoute} from "vue-router";
 export default defineComponent({
@@ -261,12 +261,14 @@ export default defineComponent({
 
     //删除
     const handleDelete = (id: number) => {
+      ids.length = 0;
       getDeleteIds(level1.value, id);
       axios.delete("/doc/delete/" + ids.join(',')).then((response) => {
+
         const data = response.data;
         if (data.success) {
           //重新加载类表
-          handleQuery()
+          handleQuery();
         }
       });
     };
