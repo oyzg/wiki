@@ -125,6 +125,10 @@ export default defineComponent({
     param.value = {};
     const docs = ref();
     const loading = ref(false);
+
+    const treeSelectData = ref();
+    treeSelectData.value = [];
+
     const columns = [
       {
         title: '名称',
@@ -158,7 +162,7 @@ export default defineComponent({
       // loading.value = true;
       // 如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则列表显示的还是编辑前的数据
       level1.value = [];
-      axios.get("/doc/all").then((response) => {
+      axios.get("/doc/all/" + route.query.ebookId).then((response) => {
         loading.value = false;
         const data = response.data;
         if (data.success) {
@@ -167,6 +171,10 @@ export default defineComponent({
           level1.value = [];
           level1.value = Tool.array2Tree(docs.value, 0);
           console.log("树形结构", level1);
+
+          treeSelectData.value = Tool.copy(level1.value);
+          treeSelectData.value.unshift({id: 0, name:"无"});
+
         } else {
           message.error(data.messages);
         }
@@ -177,8 +185,6 @@ export default defineComponent({
 
     //-----表单----------
     let editor: any;
-    const treeSelectData = ref();
-    treeSelectData.value = [];
     const doc = ref();
     doc.value = {};
     const modalVisible = ref(false);
