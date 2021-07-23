@@ -174,10 +174,11 @@ export default defineComponent({
     };
 
     //-----表单----------
-    let editor;
+    let editor: any;
     const treeSelectData = ref();
     treeSelectData.value = [];
-    const doc = ref({});
+    const doc = ref();
+    doc.value = {};
     const modalVisible = ref(false);
     const modalLoading = ref(false)
     const handleSave = () => {
@@ -185,6 +186,7 @@ export default defineComponent({
 
       axios.post("/doc/save", doc.value).then((response) => {
         modalLoading.value = false;
+        doc.value.content = editor.txt.html();
         const data = response.data;
         if (data.success) {
           modalVisible.value = false;
