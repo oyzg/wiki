@@ -77,7 +77,8 @@ public class UserService {
             }
 
         } else {
-            userMapper.updateByPrimaryKey(user);
+            user.setLoginName(null);
+            userMapper.updateByPrimaryKeySelective(user);
         }
 
     }
