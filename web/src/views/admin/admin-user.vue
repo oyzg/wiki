@@ -40,6 +40,9 @@
             <a-button type="primary" @click="edit(record)">
               编辑
             </a-button>
+            <a-button type="primary" @click="resetPassword(record)">
+              重置密码
+            </a-button>
             <a-popconfirm
                 cancel-text="否 "
                 ok-text="是"
@@ -72,6 +75,20 @@
       </a-form-item>
       <a-form-item label="密码" v-show="user.id">
         <a-input v-model:value="user.password" type="text" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
+
+  <a-modal
+      title="重置密码"
+      v-model:visible="resetModalVisible"
+      :confirm-loading="resetModalLoading"
+      @ok="handleResetModalOK"
+  >
+    <a-form :model="user" :label-col="{ spran: 6 }" :wrapper-col="{ span: 18 }">
+
+      <a-form-item label="新密码" >
+        <a-input v-model:value="user.password"/>
       </a-form-item>
     </a-form>
   </a-modal>
@@ -213,6 +230,36 @@ export default defineComponent({
         }
       });
     };
+    // -------- 重置密码 ---------
+    const resetModalVisible = ref(false);
+    const resetModalLoading = ref(false);
+    const handleResetModalOK = () => {
+      resetModalLoading.value = true;
+      user.value.password=hexMd5(user.value.password+KEY)
+      axios.post("/user/reset-password", user.value).then((response) => {
+        resetModalLoading.value = false;
+        const data = response.data;
+        if (data.success) {
+          resetModalVisible.value = false;
+          //重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize,
+          });
+        } else {
+          message.error(data.message)
+        }
+      });
+    };
+    /**
+     * 重置密码
+     */
+    const resetPassword = (record: any) => {
+      resetModalVisible.value = true;
+      user.value = Tool.copy(record);
+      user.value.password=null;
+    };
+
     onMounted(function () {
       handleQuery({
         page: 1,
@@ -233,6 +280,10 @@ export default defineComponent({
       modalVisible,
       modalLoading,
       handleModalOK,
+      resetModalVisible,
+      resetModalLoading,
+      handleResetModalOK,
+      resetPassword,
       categoryIds,
       handleQuery
     }

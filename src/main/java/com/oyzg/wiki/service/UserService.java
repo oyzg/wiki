@@ -8,7 +8,9 @@ import com.oyzg.wiki.exception.BusinessException;
 import com.oyzg.wiki.exception.BusinessExceptionCode;
 import com.oyzg.wiki.mapper.UserMapper;
 import com.oyzg.wiki.req.UserQueryReq;
+import com.oyzg.wiki.req.UserResetPasswordReq;
 import com.oyzg.wiki.req.UserSaveReq;
+import com.oyzg.wiki.resp.CommonResp;
 import com.oyzg.wiki.resp.PageResp;
 import com.oyzg.wiki.resp.UserQueryResp;
 import com.oyzg.wiki.util.CopyUtil;
@@ -99,4 +101,13 @@ public class UserService {
             return userList.get(0);
         }
     }
+
+
+    public void resetPassword(UserResetPasswordReq req) {
+        User user = CopyUtil.copy(req,User.class);
+
+        userMapper.updateByPrimaryKeySelective(user);
+
+    }
+
 }
