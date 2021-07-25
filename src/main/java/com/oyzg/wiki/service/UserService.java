@@ -4,16 +4,19 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.oyzg.wiki.domain.User;
 import com.oyzg.wiki.domain.UserExample;
+import com.oyzg.wiki.exception.BusinessException;
+import com.oyzg.wiki.exception.BusinessExceptionCode;
 import com.oyzg.wiki.mapper.UserMapper;
 import com.oyzg.wiki.req.UserQueryReq;
 import com.oyzg.wiki.req.UserSaveReq;
-import com.oyzg.wiki.resp.UserQueryResp;
 import com.oyzg.wiki.resp.PageResp;
+import com.oyzg.wiki.resp.UserQueryResp;
 import com.oyzg.wiki.util.CopyUtil;
 import com.oyzg.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -65,8 +68,14 @@ public class UserService {
     public void save(UserSaveReq req) {
         User user = CopyUtil.copy(req,User.class);
         if(ObjectUtils.isEmpty(req.getId())) {
-            user.setId(snowFlake.nextId());
-            userMapper.insert(user);
+
+            if (ObjectUtils.isEmpty(selectByLoginName(req.getLoginName()))) {
+                user.setId(snowFlake.nextId());
+                userMapper.insert(user);
+            } else {
+                throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+            }
+
         } else {
             userMapper.updateByPrimaryKey(user);
         }
@@ -75,5 +84,17 @@ public class UserService {
 
     public void delete(Long id) {
         userMapper.deleteByPrimaryKey(id);
+    }
+
+    public User selectByLoginName(String loginName) {
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andLoginNameEqualTo(loginName);
+        List<User> userList = userMapper.selectByExample(userExample);
+        if (CollectionUtils.isEmpty(userList)) {
+            return null;
+        } else {
+            return userList.get(0);
+        }
     }
 }
