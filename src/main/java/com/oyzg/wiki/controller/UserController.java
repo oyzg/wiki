@@ -1,10 +1,12 @@
 package com.oyzg.wiki.controller;
 
+import com.oyzg.wiki.req.UserLoginReq;
 import com.oyzg.wiki.req.UserQueryReq;
 import com.oyzg.wiki.req.UserResetPasswordReq;
 import com.oyzg.wiki.req.UserSaveReq;
 import com.oyzg.wiki.resp.CommonResp;
 import com.oyzg.wiki.resp.PageResp;
+import com.oyzg.wiki.resp.UserLoginResp;
 import com.oyzg.wiki.resp.UserQueryResp;
 import com.oyzg.wiki.service.UserService;
 import org.springframework.util.DigestUtils;
@@ -49,6 +51,15 @@ public class UserController {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonResp resp = new CommonResp<>();
         userService.resetPassword(req);
+        return resp;
+    }
+
+    @PostMapping("/login")
+    public CommonResp login(@Valid @RequestBody UserLoginReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp<UserLoginResp> resp = new CommonResp<>();
+        UserLoginResp userLoginResp =  userService.login(req);
+        resp.setContent(userLoginResp);
         return resp;
     }
 
