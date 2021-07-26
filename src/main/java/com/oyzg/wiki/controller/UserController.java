@@ -32,7 +32,7 @@ public class UserController {
     private UserService userService;
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,String> redisTemplate;
 
     @Resource
     private SnowFlake snowFlake;
@@ -76,7 +76,7 @@ public class UserController {
         Long token = snowFlake.nextId();
         LOG.info("生成单点登录token：{}，并放入redis中",token);
         userLoginResp.setToken(token.toString());
-        redisTemplate.opsForValue().set(token, JSONObject.toJSONString(userLoginResp), 3600*24, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(token.toString(), JSONObject.toJSONString(userLoginResp), 3600*24, TimeUnit.SECONDS);
         resp.setContent(userLoginResp);
         return resp;
     }
