@@ -16,3 +16,11 @@ Accept: application/json
 
 
 ###
+
+GET http://localhost:8880/redis/set/1232242342/test
+Accept: application/json
+
+###
+
+GET http://localhost:8880/redis/get/9355951772025344
+Accept: application/json
