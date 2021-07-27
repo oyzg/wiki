@@ -107,4 +107,4 @@ create table `user` (
 ) engine=innodb default charset=utf8mb4 comment='用户';
 
 INSERT INTO `user` (`id`, `login_name`, `name`, `password`)
-VALUES (1, 'test', '测试', 'test');
+VALUES (1, 'test', '测试', '7354a1d413535a6c0dc5c209e198d799');
