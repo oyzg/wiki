@@ -7,6 +7,7 @@ import com.oyzg.wiki.domain.Doc;
 import com.oyzg.wiki.domain.DocExample;
 import com.oyzg.wiki.mapper.ContentMapper;
 import com.oyzg.wiki.mapper.DocMapper;
+import com.oyzg.wiki.mapper.DocMapperCust;
 import com.oyzg.wiki.req.DocQueryReq;
 import com.oyzg.wiki.req.DocSaveReq;
 import com.oyzg.wiki.resp.DocQueryResp;
@@ -28,6 +29,9 @@ public class DocService {
 
     @Resource
     private DocMapper docMapper;
+
+    @Resource
+    private DocMapperCust docMapperCust;
 
     @Resource
     private SnowFlake snowFlake;
@@ -81,6 +85,8 @@ public class DocService {
         if(ObjectUtils.isEmpty(req.getId())) {
 
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
             content.setId(doc.getId());
             contentMapper.insert(content);
@@ -108,6 +114,7 @@ public class DocService {
 
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
+        docMapperCust.increaseViewCount(id);
         if (content == null) {
             return "";
         }
