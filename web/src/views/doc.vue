@@ -82,7 +82,9 @@ export default defineComponent({
 
     const onSelect = (selectedKeys: any, info: any) => {
       if (Tool.isNotEmpty(selectedKeys)) {
-        doc.value = info.selectedNodes[0].props;
+        //选中某一节点时，加载该节点的文档信息
+        doc.value=info.selectedNodes[0].props
+        //加载内容
         handleQueryContent(selectedKeys[0]);
       }
     };
@@ -100,7 +102,8 @@ export default defineComponent({
           if (Tool.isNotEmpty(level1)) {
             defaultSelectedKeys.value = [level1.value[0].id];
             handleQueryContent(level1.value[0].id);
-            doc.value = level1.value;
+            //初始显示文档信息
+            doc.value=level1.value[0]
           }
         } else {
           message.error(data.message);
@@ -108,16 +111,18 @@ export default defineComponent({
       });
     };
 
-    const vote = () => {
-      axios.get('/doc/vote/'+doc.value.id).then((response) => {
+    //点赞
+    const vote=()=>{
+      axios.get("/doc/vote/" + doc.value.id).then((response) => {
         const data = response.data;
-        if(data.success) {
+        if (data.success) {
           doc.value.voteCount++;
+          message.success("点赞成功！");
         } else {
           message.error(data.message);
         }
       });
-    };
+    }
 
     onMounted(() => {
       handleQuery();
@@ -127,7 +132,8 @@ export default defineComponent({
       html,
       onSelect,
       defaultSelectedKeys,
-      vote
+      vote,
+      doc
     }
   }
 });

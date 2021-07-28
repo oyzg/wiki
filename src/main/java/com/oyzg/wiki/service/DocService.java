@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.oyzg.wiki.domain.Content;
 import com.oyzg.wiki.domain.Doc;
 import com.oyzg.wiki.domain.DocExample;
+import com.oyzg.wiki.exception.BusinessException;
+import com.oyzg.wiki.exception.BusinessExceptionCode;
 import com.oyzg.wiki.mapper.ContentMapper;
 import com.oyzg.wiki.mapper.DocMapper;
 import com.oyzg.wiki.mapper.DocMapperCust;
@@ -13,6 +15,8 @@ import com.oyzg.wiki.req.DocSaveReq;
 import com.oyzg.wiki.resp.DocQueryResp;
 import com.oyzg.wiki.resp.PageResp;
 import com.oyzg.wiki.util.CopyUtil;
+import com.oyzg.wiki.util.RedisUtil;
+import com.oyzg.wiki.util.RequestContext;
 import com.oyzg.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +42,9 @@ public class DocService {
 
     @Resource
     private ContentMapper contentMapper;
+
+    @Resource
+    private RedisUtil redisUtil;
     
 
 
@@ -122,6 +129,13 @@ public class DocService {
     }
 
     public void vote(Long id) {
-        docMapperCust.increaseVoteCount(id);
+//        docMapperCust.increaseVoteCount(id);
+        // 远程IP+doc.id作为key，24小时内不能重复
+        String ip = RequestContext.getRemoteAddr();
+        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 3600 * 24)) {
+            docMapperCust.increaseVoteCount(id);
+        } else {
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        }
     }
 }
