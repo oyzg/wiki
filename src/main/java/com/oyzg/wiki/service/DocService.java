@@ -120,4 +120,8 @@ public class DocService {
         }
         return content.getContent();
     }
+
+    public void vote(Long id) {
+        docMapperCust.increaseVoteCount(id);
+    }
 }

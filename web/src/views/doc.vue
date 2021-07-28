@@ -15,7 +15,20 @@
           </a-tree>
         </a-col>
         <a-col :span="18">
+          <div>
+            <h2>{{doc.name}}</h2>
+            <div>
+              <span>阅读数:{{doc.viewCount}}</span> &nbsp; &nbsp;
+              <span>点赞数:{{doc.voteCount}}</span>
+            </div>
+            <a-divider style="height: 2px; background-color: #9999cc"/>
+          </div>
           <div :innerHTML="html"  class="wangeditor"></div>
+          <div class="vote-div">
+            <a-button type="primary" shape="round" :size="large" @click="vote">
+              <template #icon><LikeOutlined /> &nbsp;点赞:{{doc.voteCount}}</template>
+            </a-button>
+          </div>
         </a-col>
       </a-row>
     </a-layout-content>
@@ -31,6 +44,10 @@ import {useRoute} from 'vue-router'
 export default defineComponent({
   name: 'Doc',
   setup() {
+
+    const doc = ref();
+    doc.value = {};
+
     const route = useRoute();
     const docs = ref();
     const defaultSelectedKeys = ref();
@@ -65,6 +82,7 @@ export default defineComponent({
 
     const onSelect = (selectedKeys: any, info: any) => {
       if (Tool.isNotEmpty(selectedKeys)) {
+        doc.value = info.selectedNodes[0].props;
         handleQueryContent(selectedKeys[0]);
       }
     };
@@ -82,12 +100,25 @@ export default defineComponent({
           if (Tool.isNotEmpty(level1)) {
             defaultSelectedKeys.value = [level1.value[0].id];
             handleQueryContent(level1.value[0].id);
+            doc.value = level1.value;
           }
         } else {
           message.error(data.message);
         }
       });
     };
+
+    const vote = () => {
+      axios.get('/doc/vote/'+doc.value.id).then((response) => {
+        const data = response.data;
+        if(data.success) {
+          doc.value.voteCount++;
+        } else {
+          message.error(data.message);
+        }
+      });
+    };
+
     onMounted(() => {
       handleQuery();
     });
@@ -95,7 +126,8 @@ export default defineComponent({
       level1,
       html,
       onSelect,
-      defaultSelectedKeys
+      defaultSelectedKeys,
+      vote
     }
   }
 });
@@ -151,5 +183,9 @@ table th {
   margin: 20px 10px !important;
   font-size: 16px !important;
   font-weight: 600;
+}
+.vote-div {
+  padding: 15px;
+  text-align: center;
 }
 </style>
