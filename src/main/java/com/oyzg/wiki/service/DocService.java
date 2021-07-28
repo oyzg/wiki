@@ -18,7 +18,6 @@ import com.oyzg.wiki.util.CopyUtil;
 import com.oyzg.wiki.util.RedisUtil;
 import com.oyzg.wiki.util.RequestContext;
 import com.oyzg.wiki.util.SnowFlake;
-import com.oyzg.wiki.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -48,7 +47,7 @@ public class DocService {
     private RedisUtil redisUtil;
 
     @Resource
-    private WebSocketServer webSocketServer;
+    private WsService wsService;
 
 
     public List<DocQueryResp> all(Long id) {
@@ -142,8 +141,10 @@ public class DocService {
         }
         //推送消息
         Doc doc = docMapper.selectByPrimaryKey(id);
-        webSocketServer.sendInfo("【" + doc.getName() + "】被点赞了");
+        wsService.sendInfo("【" + doc.getName() + "】被点赞了");
     }
+
+
 
     public void updateEbookInfo() {
         docMapperCust.updateEbookInfo();

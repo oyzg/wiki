@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan("com.oyzg")
 @SpringBootApplication
 @MapperScan("com.oyzg.wiki.mapper")
-@EnableAsync
+@EnableAsync//异步化
 @EnableScheduling//启用定时任务
 public class WikiApplication {
 
