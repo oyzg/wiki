@@ -14,8 +14,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan("com.oyzg")
 @SpringBootApplication
 @MapperScan("com.oyzg.wiki.mapper")
-@EnableScheduling
 @EnableAsync
+@EnableScheduling//启用定时任务
 public class WikiApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(WikiApplication.class);
