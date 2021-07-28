@@ -150,16 +150,16 @@ export default defineComponent({
       },
       pageSize: 3,
     };
-    const actions: Record<string, string>[] = [
-      { type: 'StarOutlined', text: '156' },
-      { type: 'LikeOutlined', text: '156' },
-      { type: 'MessageOutlined', text: '2' },
-    ];
+    // const actions: Record<string, string>[] = [
+    //   { type: 'StarOutlined', text: '156' },
+    //   { type: 'LikeOutlined', text: '156' },
+    //   { type: 'MessageOutlined', text: '2' },
+    // ];
     return {
       ebooks,
       // ebooks2: toRef(ebooks1, "books")
       pagination,
-      actions,
+      // actions,
       level1,
       handleClick,
       isShowWelcome
