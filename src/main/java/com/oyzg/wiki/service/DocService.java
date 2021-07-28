@@ -149,8 +149,8 @@ public class DocService {
         //推送消息
         Doc doc = docMapper.selectByPrimaryKey(id);
         String logId = MDC.get("LOG_ID");
-//        wsService.sendInfo("【" + doc.getName() + "】被点赞了", logId);
-        rocketMQTemplate.convertAndSend("VOTE_TOPIC","【" + doc.getName() + "】被点赞了");
+        wsService.sendInfo("【" + doc.getName() + "】被点赞了", logId);
+//        rocketMQTemplate.convertAndSend("VOTE_TOPIC","【" + doc.getName() + "】被点赞了");
     }
 
 
