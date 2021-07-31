@@ -13,14 +13,12 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
-@RestController//返回字符串
+@RestController
 @RequestMapping("/doc")
 public class DocController {
 
     @Resource
     private DocService docService;
-
-
 
     @GetMapping("/all/{ebookId}")
     public CommonResp all(@PathVariable Long ebookId) {
@@ -40,7 +38,6 @@ public class DocController {
 
     @PostMapping("/save")
     public CommonResp save(@Valid @RequestBody DocSaveReq req) {
-
         CommonResp resp = new CommonResp<>();
         docService.save(req);
         return resp;
@@ -64,9 +61,8 @@ public class DocController {
 
     @GetMapping("/vote/{id}")
     public CommonResp vote(@PathVariable Long id) {
-        CommonResp resp = new CommonResp<>();
+        CommonResp commonResp = new CommonResp();
         docService.vote(id);
-        return resp;
+        return commonResp;
     }
-
 }
