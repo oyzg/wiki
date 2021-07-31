@@ -24,7 +24,7 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <div class="welcome" v-show="isShowWelcome">
-        <h1>欢迎使用Wiki知识库</h1>
+        <TheWelcome></TheWelcome>
       </div>
       <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter: 0, column: 3}" :data-source="ebooks">
         <template #renderItem="{ item }">
@@ -64,7 +64,7 @@ import {defineComponent, onMounted, ref} from 'vue';
 import axios from 'axios';
 import { message } from "ant-design-vue";
 import { Tool } from "@/util/tool";
-
+import TheWelcome from '@/components/the-welcome.vue';
 // const listData: Record<string, string>[] = [];
 //
 // for (let i = 0; i < 23; i++) {
@@ -81,6 +81,9 @@ import { Tool } from "@/util/tool";
 
 export default defineComponent({
   name: 'Home',
+  components: {
+    TheWelcome
+  },
   setup() {
     console.log('setup');
     const ebooks = ref();
